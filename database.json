@@ -1,0 +1,30 @@
+{
+    "FW-2026-001": {
+        "name": "Aarav Sharma",
+        "role": "Data Analytics Intern",
+        "start_date": "27-May-2026",
+        "end_date": "11-July-2026 (45 Days)",
+        "issue_date": "12-July-2026"
+    },
+    "FW-2026-002": {
+        "name": "Ananya Iyer",
+        "role": "Content Marketing Intern",
+        "start_date": "27-May-2026",
+        "end_date": "11-July-2026 (45 Days)",
+        "issue_date": "12-July-2026"
+    },
+    "FW-2026-003": {
+        "name": "Vihaan Patel",
+        "role": "Web Development Intern",
+        "start_date": "27-May-2026",
+        "end_date": "11-July-2026 (45 Days)",
+        "issue_date": "12-July-2026"
+    },
+    "FW-2026-004": {
+        "name": "Diya Nair",
+        "role": "UI/UX Design Intern",
+        "start_date": "27-May-2026",
+        "end_date": "11-July-2026 (45 Days)",
+        "issue_date": "12-July-2026"
+    }
+}
