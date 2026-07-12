@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluffwalks - Certificate Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #1A1A1A;
+        }
+        .verification-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border-top: 8px solid #1e4620; /* Fluffwalks signature green */
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 600;
+            color: #e67e22; /* Fluffwalks orange */
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .success { background-color: #e8f5e9; color: #2e7d32; }
+        .error { background-color: #ffebee; color: #c62828; }
+        .loading { background-color: #e0f7fa; color: #00838f; }
+        
+        .cert-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        .details {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 15px;
+            text-align: left;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="verification-card">
+    <div class="logo">🐾 FluffWalks</div>
+    <div id="status" class="status-badge loading">Checking Certificate...</div>
+    <div id="content"></div>
+</div>
+
+<script>
+    // 1. Parse the Certificate ID from the URL (e.g., ?id=FW-2026-001)
+    const urlParams = new URLSearchParams(window.location.search);
+    const certId = urlParams.get('id');
+
+    const statusBadge = document.getElementById('status');
+    const contentDiv = document.getElementById('content');
+
+    if (!certId) {
+        statusBadge.className = "status-badge error";
+        statusBadge.innerText = "Invalid Request";
+        contentDiv.innerHTML = "<p>No Certificate ID was provided for verification.</p>";
+    } else {
+        // 2. Fetch the free JSON database file
+        fetch('database.json')
+            .then(response => response.json())
+            .then(data => {
+                // 3. Check if the ID exists in our registry records
+                if (data[certId]) {
+                    const record = data[certId];
+                    statusBadge.className = "status-badge success";
+                    statusBadge.innerText = "✅ Verified Authentic Record";
+                    
+                    contentDiv.innerHTML = `
+                        <div class="cert-name">${record.name}</div>
+                        <p style="margin:5px 0; color:#666;">ID: <b>${certId}</b></p>
+                        <div class="details">
+                            <b>Position:</b> ${record.role}<br>
+                            <b>Tenure:</b> ${record.start_date} to ${record.end_date}<br>
+                            <b>Official Issue Date:</b> ${record.issue_date}
+                        </div>
+                    `;
+                } else {
+                    statusBadge.className = "status-badge error";
+                    statusBadge.innerText = "❌ Verification Failed";
+                    contentDiv.innerHTML = `<p>Certificate ID <b>${certId}</b> does not match any official Fluffwalks records.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error("Error loading registry data:", error);
+                statusBadge.className = "status-badge error";
+                statusBadge.innerText = "System Error";
+                contentDiv.innerHTML = "<p>Unable to reach verification records at this time.</p>";
+            });
+    }
+</script>
+</body>
+</html>
